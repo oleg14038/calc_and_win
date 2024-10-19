@@ -41,7 +41,7 @@ def get_user_attack():
 
 
 def run_game():
-    # Непонимаю почему в  переменную функцию присвают 
+    # Непонимаю почему в  переменную функцию присваются 
     user_total_attack = get_user_attack() 
     enemy_health = set_enemy_health()
     print(f'Тобой нанесён урон противнику равный {user_total_attack}.')
