@@ -1,61 +1,229 @@
+"""Модуль для игры, где игрок атакует противника и старается нанести урон.
+
+Игроку предоставлено 5 попыток с тремя типами атак разной мощности.
+"""
+
+# Импортируем функци randint из библиотеки random
+# для генерации случайных чисел в задоном диапозоне
+# в заданном диапозоне
 from random import randint
 
+# Определение функции которые принимает параметры и возращает целое число
+# Генерирует случайное значение здоровья для врага
+# Возращает случайное число от 80 - 120 представляюшее здоровья врага
 
-def set_enemy_health():
+
+def set_enemy_health() -> int:
+    """Generate a random health value for the enemy.
+
+    Returns:
+        int: Random health value between 80 and 120.
+    """
     return randint(80, 120)
 
 
-def get_lite_attack():
+# Генерирует случайное значение для "легкой" атаки от 2 до 5.
+
+
+def get_lite_attack() -> int:
+    """Generate a random lite attack value.
+
+    Returns:
+        int: Random lite attack value between 2 and 5.
+    """
     return randint(2, 5)
 
 
-def get_mid_attack():
+# Генерирует значение для "средней" атаки от 15 до 25.
+
+
+def get_mid_attack() -> int:
+    """Generate a random mid attack value.
+
+    Returns:
+        int: Random mid attack value between 15 and 25.
+    """
     return randint(15, 25)
 
 
-def get_hard_attack():
+# Генерирует значение для "трудной" атаки от 30 до 40.
+
+
+def get_hard_attack() -> int:
+    """Generate a random hard attack value.
+
+    Returns:
+        int: Random hard attack value between 30 and 40.
+    """
     return randint(30, 40)
 
 
-def compare_valumes(enemy_health, user_total_attack):
+# Имя функции: is_attack_effective — название функции, которое описывает
+# ее предназначение: проверять, эффективна ли атака игрока против врага.
+
+# enemy_health:
+# int — это здоровье врага, которое передается в функцию как целое число
+
+# user_total_attack:
+# int — это общие очки атаки игрока, также передаваемые как целое число.
+
+# Возврат: -> bool
+# указывает, что функция возвращает логическое значение(True или False).
+
+
+def is_attack_effective(enemy_health: int, user_total_attack: int) -> bool:
+    """Check if the user's total attack is effective against the enemy.
+
+    Args:
+        enemy_health (int): The health of the enemy.
+        user_total_attack (int): The total attack points from the user.
+
+    Returns:
+        bool: True if the attack is effective, False otherwise.
+    """
+    # enemy_health - user_total_attack
+    # — вычитание общей атаки игрока из здоровья врага.
+
+    # abs(...) — функция
+    # abs() возвращает абсолютное значение разности,
+    # чтобы избежать негативного результат
     point_difference = abs(enemy_health - user_total_attack)
-    if 0 <= point_difference <= 10:
-        return True
-    return False
+
+    # 0 <= point_difference
+    # — проверяет, что разница не отрицательная
+    # (т.е., атака не превышает здоровье врага)
+
+    # point_difference <= 10
+    # — проверяет, что разница не больше 10.
+    # Это означает, что если разница между атакой и здоровьем врага составляет
+    # 10 или меньше, то атака считается эффективной.
+
+    # Условие: Если разница равна 0 или меньше 10 (включительно),
+    # то атака считается эффективной.
+    return 0 <= point_difference <= 10
 
 
-def get_user_attack():
+def get_user_attack() -> int:
+    """Get the total attack points from the user.
+
+    Returns:
+        int: The total damage value from the user's attacks.
+    """
+
+    # Инициализация переменной:
+    # Здесь создается переменная total, инициализируемая нулем.
+    # Она будет использоваться для суммирования очков атаки,
+    # полученных от пользователя
     total = 0
-    attacks_types = {
-        'lite': get_lite_attack,
-        'mid': get_mid_attack,
-        'hard': get_hard_attack,
+
+    # Словарь типов атаки:
+    # Создается словарь attack_types, в котором ключи — это строки,
+    # представляющие типы атак ("lite", "mid", "hard"),
+    # значения — это функции,
+    # которые генерируют соответствующие значения урона.
+    # Это позволяет легко вызывать нужную функцию, основываясь
+    # на вводе пользов��теля.
+
+    attack_types = {
+        "lite": get_lite_attack,
+        "mid": get_mid_attack,
+        "hard": get_hard_attack,
     }
 
-    for i in range(5):
-        input_attack = input('Введи тип атаки: ').lower()
-        attack_value = attacks_types[input_attack]()
-        print(f'Количество очков твоей атаки: {attack_value}.')
-        total += 1
+    # Цикл: Запускается цикл, который будет выполняться 5 раз.
+    # Символ _ используется в качестве счетчика цикла,
+    # когда фактическое значение не нужно.
+
+    for _ in range(5):
+
+        # Запрос ввода: На каждой итерации цикла пользователю предлагается
+        # ввести тип атаки.
+        # Введенное значение преобразуется в нижний регистр с помощью метода
+        # .lower()
+        input_attack = input("Введите тип атаки (lite, mid, hard): ").lower()
+
+        # Проверка корректности ввода: Эта строка проверяет,
+        # есть ли введенный тип атаки в словаре attack_types.
+        # Если его нет, это значит, что пользователь
+        # ввел некорректный тип атаки
+        if input_attack not in attack_types:
+
+            # Вывод сообщения об ошибке: Если тип атаки неверен,
+            # программа выводит сообщение об ошибке и предлагает
+            # пользователю попробовать снова
+            print("Некорректный тип атаки! Попробуйте снова.")
+
+            # Продолжение цикла: Команда continue пропускает оставшуюся
+            # часть текущей итерации цикла и переходит к следующей
+            #  итерации, что позволяет пользователю ввести корректный
+            # тип атаки заново.
+            continue
+
+        # Использование выражения
+        # 1. attack_value = attack_types[input_attack]()
+        # позволяет динамически вызывать функцию, которая соответствует типу
+        # Словарь функций: attack_types это словарь, где ключами являются
+        # строки (типы атак),а значениями — функции, которые возвращают
+        # случайные значения урона.
+        # Например, ключ "lite" соответствует функции get_lite_attack.
+
+        # 2. Получение функции:
+        # При использовании input_attack в attack_types[input_attack]
+        # происходит поиск значения в словаре по введённому пользователем
+        # ключу.
+        # Если пользователь ввёл, например, "lite", то attack_types["lite"]
+        # вернёт ссылку на функцию get_lite_attack.
+
+        # 3. Вызов функции: Круглые скобки () в конце выражения означают,
+        # что мы вызываем эту функцию. Это аналогично записи
+        # attack_value = get_lite_attack() (если бы пользователь ввёл "lite").
+        # В результате вызова функции возвращается случайное значение урона,
+        # которое сохраняется в переменной attack_value
+        attack_value = attack_types[input_attack]()
+
+        # Вызов функции: Если тип атаки корректен,
+        # соответствующая функция (например, get_lite_attack)
+        # вызывается для генерации значения урона, и результат
+        # сохраняется в переменной attack_value.
+        print(f"Количество очков твоей атаки: {attack_value}.")
+
+        # Вывод значения атаки: Программа выводит количество очков атаки,
+        #  которое игрок только что сгенерировал.
+        total += attack_value  # Добавляем значение атаки, а не 1
+
+        # Возврат результата: После завершения цикла функция возвращает общее
+        # количество очков атаки,
+        # которые игрок набрал за 5 ходов
     return total
 
 
-def run_game():
-    # Непонимаю почему в  переменную функцию присваются 
-    user_total_attack = get_user_attack() 
-    enemy_health = set_enemy_health()
-    print(f'Тобой нанесён урон противнику равный {user_total_attack}.')
-    print(f'Очки здоровья противника до твоей атаки: {enemy_health}.')
-    if compare_valumes(enemy_health, user_total_attack): 
-        print('Ура! Победа за тобой!')
-    else:
-        print('В этот раз не повезло :( Бой проигран.')
+def is_wanting_to_play() -> bool:
+    """Prompts the user to decide if they want to play again.
+
+    Returns:
+        bool: True if the user wants to play again, False otherwise.
+    """
     yes_no = {
-        'Y': True,
-        'N': False,
+        "y": True,
+        "n": False,
     }
-    replay = input('Чтобы сыграть ещё раз, введи "y"; '
-                   'если не хочешь продолжать игру, введи "n": ')
+    replay = input(
+        'Чтобы сыграть ещё раз, введи "y"; '
+        'если не хочешь продолжать игру, введи "n": ',
+    ).lower()
+
     if replay not in yes_no:
-        raise ValueError('Такой команды в игре нет.')
+        raise ValueError("Такой команды в игре нет.")
     return yes_no[replay]
+
+
+# Этот блок используется, чтобы определить,
+# запускается ли скрипт как основная программа или импортируется
+# как модуль в другом скрипте.
+# Когда скрипт запускается, Python присваивает встроенной переменной
+# __name__ значение "__main__". Если этот файл импортируется
+# в другой программе,
+# __name__ будет равно имени файла (например, "module").
+if __name__ == "__main__":
+    while is_wanting_to_play():
+        pass
